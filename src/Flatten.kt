@@ -1,4 +1,5 @@
-import kotlin.coroutines.experimental.buildIterator
+//import kotlin.coroutines.experimental.buildIterator
+import kotlin.sequences.iterator
 
 fun main(args: Array<String>) {
     val list1 = listOf(9, listOf(1, 2, 3), listOf(4, 5, listOf(6, 7)), 8)
@@ -18,7 +19,6 @@ fun main(args: Array<String>) {
     println("flattenIterator2")
     for (item in list1.flattenIterator2())
         println(item)
-
 }
 
 
@@ -64,7 +64,7 @@ fun <T> flattenIterative(list: List<T>): List<T> {
     return mutList.toList()
 }
 
-fun <T> flattenIterator(list: List<T>): Iterator<Any?> = buildIterator {
+fun <T> flattenIterator(list: List<T>): Iterator<Any?> = iterator() {
     for (item in list) {
         if (item is List<*>)
             for (i in flattenIterator(item))
@@ -74,7 +74,7 @@ fun <T> flattenIterator(list: List<T>): Iterator<Any?> = buildIterator {
     }
 }
 
-fun <T> List<T>.flattenIterator1(): Iterator<Any?> = buildIterator {
+fun <T> List<T>.flattenIterator1(): Iterator<Any?> = iterator() {
     for (item in this@flattenIterator1) {
         if (item is List<*>)
             for (i in item.flattenIterator1())
@@ -84,10 +84,10 @@ fun <T> List<T>.flattenIterator1(): Iterator<Any?> = buildIterator {
     }
 }
 
-fun <T> List<T>.flattenIterator2(): Iterator<Any?> = buildIterator {
+fun <T> List<T>.flattenIterator2(): Iterator<Any?> = iterator() {
     for (item in this@flattenIterator2) {
         if (item is List<*>)
-            yieldAll(item.flattenIterator1())
+            yieldAll(item.flattenIterator2())
         else
             yield(item)
     }
